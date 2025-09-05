@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - GoodPrompt</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Poppins', sans-serif;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            background: #111;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+        .signup-form input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .signup-form button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            background: #00ff7f;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .signup-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 127, 0.4);
+        }
+        a {
+            color: #00ff7f;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up for GoodPrompt</h2>
+        <!-- The form is now configured to POST data to the 'signup_post' endpoint -->
+        <form class="signup-form" action="{{ url_for('signup_post') }}" method="post">
+            <!-- Added 'name' attributes to the inputs for backend processing -->
+             <input type="name" name="name" placeholder="what should we call you?" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <a href="{{ url_for('login') }}">Already have an account? Login here.</a>
+    </div>
+</body>
+</html>

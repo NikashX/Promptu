@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodPrompt</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* --- GLOBAL RESET & LAYOUT FIXES --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            color: #e0e0e0;
+            background-color: #0d0d0d;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+        
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 13, 13, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+        }
+        .navbar a {
+            color: #e0e0e0;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 500;
+            transition: color 0.2s, transform 0.2s;
+            position: relative;
+        }
+        .navbar a:hover {
+            color: #00ff7f; /* Green hover color */
+        }
+
+        /* HERO */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .hero h1, .hero p, .hero div {
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+        }
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .hero-gradient-text {
+            background: linear-gradient(to right, #00ff7f, #33ff99);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-white-text {
+            color: #ffffff;
+        }
+
+        /* BUTTONS */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .button {
+            display: inline-block;
+            background: #00ff7f;
+            color: #000000;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none !important;
+            box-shadow: 0 8px 25px rgba(0, 255, 127, 0.4);
+            border: none;
+        }
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 255, 127, 0.6);
+        }
+        
+        /* Style for the secondary button specifically */
+        .button.secondary {
+            background: transparent;
+            color: #00ff7f;
+            box-shadow: none;
+            border: 2px solid #00ff7f;
+        }
+        .button.secondary:hover {
+            background: #00ff7f;
+            color: #000000;
+            box-shadow: none;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 6rem 4rem;
+            text-align: center;
+            background-color: transparent;
+            color: #e0e0e0;
+        }
+        .section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+        .section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: auto;
+            line-height: 1.7;
+            color: #a0a0a0;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #00ff7f;
+            margin-bottom: 0.5rem;
+        }
+
+        /* CARDS */
+        .features, .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 3rem;
+        }
+        .card {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #333;
+            text-align: left;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+        }
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .card p {
+            font-size: 1rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+            max-width: none;
+            margin: 0;
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            color: #00ff7f;
+            margin-bottom: 1.5rem;
+        }
+        .testimonial-card {
+            background: #111;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            text-align: left;
+        }
+        .testimonial-quote {
+            font-style: italic;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        .testimonial-author {
+            margin-top: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .testimonial-title {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            margin-top: 0.2rem;
+        }
+
+        /* HOW IT WORKS CARDS */
+        .how-it-works-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 3rem;
+        }
+        .how-card {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #333;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .how-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+        }
+        .how-card .card-icon {
+            font-size: 3rem;
+            color: #00ff7f;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* CTA SECTION */
+        .cta {
+            padding: 6rem 4rem;
+            text-align: center;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            margin: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #000000;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div style="color:#ffffff; font-weight:800; font-size:1.5rem;">Good<span class="hero-gradient-text">Prompt</span></div>
+        <div>
+            <a href="#features">Features</a>
+            <a href="#how">How It Works</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#cta">Pricing</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>
+            <span class="hero-gradient-text">Craft </span>
+            <span class="hero-white-text">AI Prompts</span>
+            <span class="hero-gradient-text"> with </span>
+            <span class="hero-white-text">Precision</span>
+        </h1>
+        <p>The smartest way to craft effective AI prompts. Built for creators, developers, and teams who want results—fast.</p>
+        <div class="button-container">
+            <a href="{{ url_for('login') }}" class="button">Start Free Today</a>
+            <a href="#features" class="button secondary">Learn More</a>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div id="features" class="section">
+        <div class="subtitle">THE SMART WAY TO PROMPT</div>
+        <h2>Craft Prompts That Work</h2>
+        <p>Go beyond simple text. Good Prompt uses AI to understand your intent and refine your prompts for maximum impact.</p>
+        <div class="features">
+            <div class="card">
+                <div class="card-icon">✨</div>
+                <h3>AI-Powered Refinement</h3>
+                <p>Our intelligent engine analyzes your input and suggests improvements, ensuring your prompts are clear, concise, and highly effective.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Instant Creation</h3>
+                <p>Say goodbye to trial and error. Generate complex, high-quality prompts in a fraction of the time, so you can focus on creation.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>Total Control</h3>
+                <p>Fine-tune every aspect of your prompt—from tone and length to specific constraints—with an intuitive, easy-to-use interface.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div id="how" class="section">
+        <div class="subtitle">SIMPLE, FAST, POWERFUL</div>
+        <h2>The Process is Simple</h2>
+        <p>Good Prompt is simple by design. Here’s how you get results in just 3 easy steps:</p>
+        <div class="how-it-works-cards">
+            <div class="how-card">
+                <div class="card-icon">1.</div>
+                <h3>Start with an idea.</h3>
+                <p>Start with a simple thought or a rough idea. Our editor is designed to capture your raw intent without friction.</p>
+            </div>
+            <div class="how-card">
+                <div class="card-icon">2.</div>
+                <h3>AI refines your prompt.</h3>
+                <p>Our intelligent engine takes your idea and transforms it into a perfectly structured, effective prompt, ready for any AI model.</p>
+            </div>
+            <div class="how-card">
+                <div class="card-icon">3.</div>
+                <h3>Copy and go.</h3>
+                <p>Instantly copy the refined prompt and paste it directly into ChatGPT, Claude, or any other AI application. It just works.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div id="testimonials" class="section">
+        <div class="subtitle">TRUSTED BY INNOVATORS</div>
+        <h2>What Our Users Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-quote">
+                    "Good Prompt completely changed my workflow. The time I used to spend on prompt engineering is now dedicated to creative work."
+                </div>
+                <div class="testimonial-author">John Doe</div>
+                <div class="testimonial-title">Head of R&D, TechCorp</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-quote">
+                    "The precision control is a game-changer. It allows our team to get consistent, high-quality outputs from our AI tools, every time."
+                </div>
+                <div class="testimonial-author">Jane Smith</div>
+                <div class="testimonial-title">Senior AI Engineer, Innovate Solutions</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div id="cta" class="cta">
+        <h2>Ready to Master AI?</h2>
+        <p>Join the new generation of creators and developers who are using Good Prompt to get consistent, high-quality results from any AI model.</p>
+        <a href="{{ url_for('login') }}" class="button">Start Free Today</a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        © 2025 Good Prompt. All rights reserved.
+    </div>
+</body>
+</html>

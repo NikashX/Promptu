@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodPrompt App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen text-gray-200">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="flex-shrink-0 w-full md:w-72 bg-gray-900 border-r border-gray-800 p-6 flex flex-col space-y-6">
+        <h2 class="text-3xl font-extrabold text-white mb-4 pb-2 border-b-2 border-green-500">
+            Prompt Architect
+        </h2>
+        <div class="space-y-4">
+            <div>
+                <label for="user_tone" class="block text-sm font-medium text-gray-400">Tone</label>
+                <input type="text" id="user_tone" placeholder="Casual, Professional, Academic"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="context" class="block text-sm font-medium text-gray-400">Context</label>
+                <input type="text" id="context" placeholder="e.g., product launch, academic paper"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="prompt_size" class="block text-sm font-medium text-gray-400">Prompt Size</label>
+                <input type="text" id="prompt_size" placeholder="small, large, medium"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="negative_aspects" class="block text-sm font-medium text-gray-400">Negative Aspects</label>
+                <input type="text" id="negative_aspects" placeholder="no jargon, avoid specific topics"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="country_lang" class="block text-sm font-medium text-gray-400">Country/Language</label>
+                <input type="text" id="country_lang" placeholder="e.g., US/English"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="industry" class="block text-sm font-medium text-gray-400">Industry</label>
+                <input type="text" id="industry" placeholder="e.g., Tech, Finance"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+            <div>
+                <label for="output_format" class="block text-sm font-medium text-gray-400">Output Format</label>
+                <input type="text" id="output_format" placeholder="text, image, image link"
+                    class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+            </div>
+        </div>
+        
+        <a href="{{ url_for('login') }}" 
+           class="mt-auto block w-full text-center px-4 py-3 bg-green-500 text-gray-900 font-semibold rounded-full 
+                  hover:bg-green-600 transition-transform transform hover:-translate-y-0.5">
+            Logout
+        </a>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-grow p-6 md:p-10 flex flex-col">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-2">Welcome to GoodPrompt!</h1>
+        <p class="text-lg text-gray-400 mb-6">
+            Use the sidebar to define your prompt parameters, then write your request below to generate a precise prompt.
+        </p>
+
+        <label for="prompt-request" class="block text-sm font-medium text-gray-400 mb-2">Your Request:</label>
+        <textarea id="prompt-request" placeholder="Describe what you want to achieve with the AI..."
+            class="w-full h-48 p-4 mb-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors resize-none"></textarea>
+        
+        <div class="flex justify-start mb-10">
+            <button onclick="generatePrompt()"
+                class="px-8 py-3 bg-green-500 text-gray-900 font-bold text-lg rounded-full 
+                       hover:bg-green-600 transition-transform transform hover:-translate-y-1 shadow-lg hover:shadow-green-500/40">
+                Generate Prompt
+            </button>
+        </div>
+        
+        <div class="flex-grow flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-white">Generated Output</h2>
+                <button id="copy-button" onclick="copyPrompt()"
+                    class="px-4 py-2 bg-gray-700 text-gray-300 rounded-full text-sm font-semibold hover:bg-gray-600
+                           transition-colors focus:outline-none focus:ring-2 focus:ring-green-500">
+                    Copy Prompt
+                </button>
+            </div>
+            <div id="loading-spinner" class="spinner mx-auto hidden"></div>
+            <pre id="generated-output" 
+                 class="flex-grow w-full p-6 bg-gray-800 border border-gray-700 rounded-lg 
+                        text-gray-300 font-mono whitespace-pre-wrap overflow-auto">
+The generated prompt will appear here...
+            </pre>
+        </div>
+    </main>
+
+    <script>
+        async function generatePrompt() {
+            const outputElement = document.getElementById('generated-output');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            // Show loading state
+            loadingSpinner.classList.remove('hidden');
+            outputElement.textContent = "Generating prompt...";
+
+            const userRequest = document.getElementById('prompt-request').value;
+            const userTone = document.getElementById('user_tone').value;
+            const context = document.getElementById('context').value;
+            const promptSize = document.getElementById('prompt_size').value;
+            const negativeAspects = document.getElementById('negative_aspects').value;
+            const countryLang = document.getElementById('country_lang').value;
+            const industry = document.getElementById('industry').value;
+            const outputFormat = document.getElementById('output_format').value;
+
+            try {
+                const response = await fetch('/generate_prompt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_request: userRequest,
+                        user_tone: userTone,
+                        context: context,
+                        prompt_size: promptSize,
+                        negative_aspects: negativeAspects,
+                        country_lang: countryLang,
+                        industry: industry,
+                        output_format: outputFormat
+                    })
+                });
+    
+                const result = await response.json();
+                
+                if (response.ok) {
+                    outputElement.textContent = result.generated_output;
+                } else {
+                    outputElement.textContent = `Error: ${result.error}`;
+                }
+            } catch (e) {
+                outputElement.textContent = `An error occurred: ${e.message}`;
+            } finally {
+                // Hide loading state
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        async function copyPrompt() {
+            const outputElement = document.getElementById('generated-output');
+            const copyButton = document.getElementById('copy-button');
+            const promptText = outputElement.textContent.trim();
+
+            if (promptText === "The generated prompt will appear here..." || promptText.startsWith("Generating prompt...")) {
+                // Don't copy the placeholder text
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(promptText);
+                const originalText = copyButton.textContent;
+                copyButton.textContent = "Copied!";
+                copyButton.classList.add('bg-green-500', 'text-gray-900', 'hover:bg-green-500');
+                copyButton.classList.remove('bg-gray-700', 'text-gray-300', 'hover:bg-gray-600');
+                
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                    copyButton.classList.remove('bg-green-500', 'text-gray-900', 'hover:bg-green-500');
+                    copyButton.classList.add('bg-gray-700', 'text-gray-300', 'hover:bg-gray-600');
+                }, 2000); // Revert after 2 seconds
+
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                copyButton.textContent = "Error";
+                setTimeout(() => {
+                    copyButton.textContent = "Copy Prompt";
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

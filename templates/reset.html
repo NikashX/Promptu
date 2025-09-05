@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-gray-200 p-6">
+    <div class="w-full max-w-sm p-8 bg-gray-900 rounded-2xl shadow-lg border border-gray-800 space-y-6">
+        <h2 class="text-3xl font-extrabold text-white text-center">Reset Password</h2>
+        <div>
+            <label for="reset-email" class="block text-sm font-medium text-gray-400">Email Address</label>
+            <input type="email" id="reset-email" placeholder="you@example.com"
+                class="mt-1 w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+        </div>
+        <button onclick="handlePasswordReset()"
+            class="w-full px-8 py-3 bg-green-500 text-gray-900 font-bold rounded-full 
+                   hover:bg-green-600 transition-transform transform hover:-translate-y-1 shadow-lg hover:shadow-green-500/40">
+            Send Reset Link
+        </button>
+        <a href="#" onclick="window.history.back()"
+            class="w-full block text-center text-sm text-gray-400 hover:text-green-500 transition-colors">
+            Back to Login
+        </a>
+        <div id="reset-message" class="text-center text-green-400"></div>
+    </div>
+
+    <script>
+        // Handles password reset
+        function handlePasswordReset() {
+            const email = document.getElementById('reset-email').value;
+            const messageElement = document.getElementById('reset-message');
+
+            if (email) {
+                // In a real application, this would call a backend service
+                // to send a password reset email. This is a simulation.
+                messageElement.textContent = `A password reset link has been sent to ${email}.`;
+                document.getElementById('reset-email').value = '';
+            } else {
+                messageElement.textContent = "Please enter your email address.";
+            }
+        }
+    </script>
+</body>
+</html>
